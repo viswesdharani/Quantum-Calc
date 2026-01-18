@@ -476,15 +476,15 @@
   </div>
 
   <audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-modern-click-box-check-1120.mp3"></audio>
-  <script src="calculator.js">
-    
+<script src="calculator.js"></script>
+
+<script>
   // ✅ Show splash only once per session
   if (!sessionStorage.getItem("qcSplashShown")) {
     sessionStorage.setItem("qcSplashShown", "yes");
     window.location.href = "splash.html";
   }
+</script>
 
-
-  </script>
 </body>
 </html>
