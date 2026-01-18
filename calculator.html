@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quantum Calc</title>
+  <link rel="stylesheet" href="calculator.css" />
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+
+
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="brand">
+        <h1>Quantum Calc</h1>
+        <p class="sub">Professional Calculator Suite</p>
+      </div>
+
+      <div class="header-actions">
+        <button id="formatBtn" class="icon-btn" title="Format">NORMAL</button>
+
+        <button id="themeBtn" class="icon-btn" title="Theme">🌙</button>
+        <button id="soundBtn" class="icon-btn" title="Sound">🔊</button>
+      </div>
+    </header>
+
+    <!-- Mode Switch -->
+    <section class="modebar">
+      <button class="mode-btn active" id="simpleModeBtn">Simple</button>
+      <button class="mode-btn" id="robustModeBtn">Robust Mode</button>
+    </section>
+
+    <!-- Robust Categories -->
+    <section class="categories hidden" id="robustCategories">
+
+      <button class="cat-btn active" data-section="scientificSection">Scientific</button>
+      <button class="cat-btn" data-section="trigSection">Trig / Hyper / Inverse</button>
+      <button class="cat-btn" data-section="logSection">Logarithmic</button>
+      <button class="cat-btn" data-section="powerSection">Power / Exponential</button>
+      <button class="cat-btn" data-section="memorySection">Memory</button>
+      <button class="cat-btn" data-section="roundingSection">Rounding / Special</button>
+      <button class="cat-btn" data-section="factorSection">Factorial</button>
+      <button class="cat-btn" data-section="degRadSection">DEG / RAD</button>
+      <button class="cat-btn" data-section="statsSection">Statistics</button>
+<button class="cat-btn" data-section="solverSection">Solver</button>
+
+      <button class="cat-btn" data-section="unitSection">Unit Converter</button>
+      <button class="cat-btn" data-section="graphSection">Graph</button>
+      <button class="cat-btn" data-section="currencySection">Currency</button>
+      <button class="cat-btn" data-section="programmerSection">Programmer</button>
+<button class="cat-btn" data-section="matrixSection">Matrix</button>
+<button class="cat-btn" data-section="complexSection">Complex</button>
+
+    </section>
+
+    <!-- Main Layout -->
+    <main class="layout">
+
+      <!-- History -->
+      <aside class="history">
+        <div class="history-head">
+          <h3>History</h3>
+          <button id="clearHistoryBtn" class="small-btn">Clear</button>
+          <button id="exportTxtBtn" class="small-btn">TXT</button>
+<button id="exportCsvBtn" class="small-btn">CSV</button>
+
+        </div>
+        <ul id="historyList"></ul>
+      </aside>
+
+      <!-- Calculator Panel -->
+      <section class="panel">
+
+        <!-- Display -->
+        <div class="display">
+          <div class="display-top">
+            <span>
+              MODE: <b id="angleModeText">DEG</b> |
+              MEM: <b id="memIndicator">OFF</b>
+            </span>
+            <span class="hint">Keyboard Enabled</span>
+          </div>
+
+          <div id="previous" class="previous"></div>
+
+          <div class="editor">
+            <div id="cursor" class="cursor"></div>
+            <div id="current" class="current">0</div>
+          </div>
+
+          <div class="display-actions">
+            <button id="copyBtn" class="small-btn">Copy</button>
+            <button id="clearEntryBtn" class="small-btn">CE</button>
+          </div>
+        </div>
+        <!-- ✅ Result Panel (Premium) -->
+<div class="result-panel" id="resultPanel">
+  <div class="rp-head">
+    <b>Result Panel</b>
+    <span id="evalStatus" class="rp-status">Ready</span>
+  </div>
+  <div id="livePreview" class="rp-preview">Preview: —</div>
+  <div id="smartError" class="rp-error"></div>
+</div>
+<!-- ✅ Calculation Steps Panel -->
+<div class="steps-panel" id="stepsPanel">
+  <div class="rp-head">
+    <b>Calculation Steps</b>
+    <span class="rp-status" id="stepsStatus">Steps: —</span>
+  </div>
+  <ol id="stepsList"></ol>
+</div>
+
+
+<!-- ✅ Expression Memory Panel -->
+<div class="exp-memory" id="expMemory">
+  <div class="rp-head">
+    <b>Expression Memory</b>
+    <button class="small-btn" id="clearExpMemBtn" type="button">Clear</button>
+  </div>
+  <ul id="expMemoryList"></ul>
+</div>
+
+
+        <!-- ✅ MAIN KEYPAD LAYOUT -->
+        <div class="keypad-layout">
+
+          <!-- LEFT: always number keypad -->
+          <div class="main-keypad">
+            <div class="btn-grid active" id="simpleSection">
+
+              <button class="btn action" data-action="clear">AC</button>
+              <button class="btn action" data-action="delete">DEL</button>
+              <button class="btn soft" data-value="%">%</button>
+              <button class="btn soft" data-value="/">÷</button>
+
+              <button class="btn" data-value="7">7</button>
+              <button class="btn" data-value="8">8</button>
+              <button class="btn" data-value="9">9</button>
+              <button class="btn soft" data-value="*">×</button>
+
+              <button class="btn" data-value="4">4</button>
+              <button class="btn" data-value="5">5</button>
+              <button class="btn" data-value="6">6</button>
+              <button class="btn soft" data-value="-">−</button>
+
+              <button class="btn" data-value="1">1</button>
+              <button class="btn" data-value="2">2</button>
+              <button class="btn" data-value="3">3</button>
+              <button class="btn soft" data-value="+">+</button>
+
+              <button class="btn wide" data-value="0">0</button>
+              <button class="btn" data-value=".">.</button>
+              <button class="btn soft" data-value="neg">±</button>
+              <button class="btn equal" data-action="equals">=</button>
+
+              <button class="btn soft" data-value="(">(</button>
+              <button class="btn soft" data-value=")">)</button>
+              <button class="btn soft" data-value="ans">ANS</button>
+              <button class="btn soft" data-value="pi">π</button>
+
+            </div>
+          </div>
+
+          <!-- RIGHT: robust panel -->
+          <div class="robust-panel hidden" id="robustArea">
+            <div class="robust-box">
+
+<!-- ✅ EQUATION SOLVER -->
+<div class="tool-card robust-section" id="solverSection">
+  <h3>Equation Solver</h3>
+
+  <div class="tool-grid">
+    <input id="eqInput" type="text" value="2x+3=11" placeholder="Example: 2x+3=11 or x^2+5x+6=0">
+
+    <div class="prog-actions">
+      <button class="tool-btn" id="solveLinearBtn" type="button">Solve Linear</button>
+      <button class="tool-btn" id="solveQuadBtn" type="button">Solve Quadratic</button>
+    </div>
+
+    <div id="eqResult" class="tool-result">Result: —</div>
+  </div>
+</div>
+
+
+                <!-- ✅ COMPLEX NUMBERS MODE -->
+<div class="tool-card robust-section" id="complexSection">
+  <h3>Complex Mode</h3>
+
+  <div class="tool-grid">
+    <input id="c1" type="text" value="2+3i" placeholder="Example: 2+3i">
+    <input id="c2" type="text" value="1-4i" placeholder="Example: 1-4i">
+
+    <div class="prog-actions">
+      <button class="tool-btn" id="cAddBtn" type="button">Add</button>
+      <button class="tool-btn" id="cSubBtn" type="button">Subtract</button>
+      <button class="tool-btn" id="cMulBtn" type="button">Multiply</button>
+      <button class="tool-btn" id="cDivBtn" type="button">Divide</button>
+    </div>
+
+    <button class="tool-btn" id="cInfoBtn" type="button">Magnitude + Argument</button>
+
+    <div id="complexResult" class="tool-result">Result: —</div>
+  </div>
+</div>
+
+                <div class="tool-card robust-section" id="statsSection">
+  <h3>Statistics Mode</h3>
+  <div class="tool-grid">
+    <input id="statsInput" type="text" value="10,20,30,40">
+    <button class="tool-btn" id="statsBtn" type="button">Calculate Stats</button>
+    <div id="statsResult" class="tool-result">Result: —</div>
+  </div>
+</div>
+
+
+
+<div class="robust-tabs">
+  <button class="rtab active" data-rtab="rtTools">Tools</button>
+  <button class="rtab" data-rtab="rtGraph">Graph</button>
+  <button class="rtab" data-rtab="rtConvert">Convert</button>
+  <button class="rtab" data-rtab="rtMore">More</button>
+</div>
+
+              <!-- scientific -->
+              <div class="btn-grid robust-section active" id="scientificSection">
+                <button class="btn soft" id="shiftBtn" type="button">SHIFT</button>
+<button class="btn soft" id="storeExpBtn" type="button">STORE</button>
+
+<div class="favbar">
+  <button class="btn soft" data-value="sin(">sin</button>
+  <button class="btn soft" data-value="cos(">cos</button>
+  <button class="btn soft" data-value="tan(">tan</button>
+  <button class="btn soft" data-value="log(">log</button>
+  <button class="btn soft" data-value="ln(">ln</button>
+  <button class="btn soft" data-value="sqrt(">√</button>
+  <button class="btn soft" data-value="pow2">x²</button>
+</div>
+
+
+
+
+                <button class="btn soft" data-value="e">e</button>
+                <button class="btn soft" data-value="Rand">Rand</button>
+                <button class="btn soft" data-value="sqrt(">√</button>
+                <button class="btn soft" data-value="cbrt(">³√</button>
+
+                <button class="btn soft" data-value="inv">1/x</button>
+                <button class="btn soft" data-value="mod">mod</button>
+                <button class="btn soft" data-value="abs(">abs</button>
+                <button class="btn soft" data-value="round(">round</button>
+              </div>
+
+              <!-- trig -->
+              <div class="btn-grid robust-section" id="trigSection">
+                <button class="btn soft" data-value="sin(">sin</button>
+                <button class="btn soft" data-value="cos(">cos</button>
+                <button class="btn soft" data-value="tan(">tan</button>
+                <button class="btn soft" data-value="sec(">sec</button>
+
+                <button class="btn soft" data-value="csc(">csc</button>
+                <button class="btn soft" data-value="cot(">cot</button>
+                <button class="btn soft" data-value="asin(">asin</button>
+                <button class="btn soft" data-value="acos(">acos</button>
+
+                <button class="btn soft" data-value="atan(">atan</button>
+                <button class="btn soft" data-value="sinh(">sinh</button>
+                <button class="btn soft" data-value="cosh(">cosh</button>
+                <button class="btn soft" data-value="tanh(">tanh</button>
+              </div>
+
+              <!-- log -->
+              <div class="btn-grid robust-section" id="logSection">
+                <button class="btn soft" data-value="log(">log</button>
+                <button class="btn soft" data-value="ln(">ln</button>
+                <button class="btn soft" data-value="tenpow">10ˣ</button>
+                <button class="btn soft" data-value="epow">eˣ</button>
+              </div>
+
+              <!-- power -->
+              <div class="btn-grid robust-section" id="powerSection">
+                <button class="btn soft" data-value="pow2">x²</button>
+                <button class="btn soft" data-value="pow">xʸ</button>
+                <button class="btn soft" data-value="EXP">EXP</button>
+                <button class="btn soft" data-value="yroot">y√x</button>
+              </div>
+
+              <!-- memory -->
+              <div class="btn-grid robust-section" id="memorySection">
+                <button class="btn soft" data-value="MC">MC</button>
+                <button class="btn soft" data-value="MR">MR</button>
+                <button class="btn soft" data-value="MS">MS</button>
+                <button class="btn soft" data-value="MPLUS">M+</button>
+                <button class="btn soft" data-value="MMINUS">M−</button>
+              </div>
+
+              <!-- rounding -->
+              <div class="btn-grid robust-section" id="roundingSection">
+                <button class="btn soft" data-value="floor(">floor</button>
+                <button class="btn soft" data-value="ceil(">ceil</button>
+                <button class="btn soft" data-value="round(">round</button>
+                <button class="btn soft" data-value="abs(">abs</button>
+              </div>
+
+              <!-- factorial -->
+              <div class="btn-grid robust-section" id="factorSection">
+                <button class="btn soft" data-value="factorial">x!</button>
+              </div>
+
+              <!-- DEG/RAD -->
+              <div class="tool-card robust-section" id="degRadSection">
+                <h3>Angle Mode</h3>
+                <button class="tool-btn" id="angleBtn" type="button">Toggle DEG/RAD</button>
+              </div>
+
+              <!-- ✅ Unit Converter -->
+              <div class="tool-card robust-section" id="unitSection">
+                <h3>Unit Converter</h3>
+
+                <div class="tool-grid">
+                  <select id="unitType">
+                    <option value="speed">Speed</option>
+<option value="area">Area</option>
+<option value="volume">Volume</option>
+<option value="time">Time</option>
+<option value="data">Data</option>
+
+                    <option value="length">Length</option>
+                    <option value="weight">Weight</option>
+                    <option value="temp">Temperature</option>
+                  </select>
+
+                  <input id="unitValue" type="number" value="1" />
+                  <select id="unitFrom"></select>
+                  <select id="unitTo"></select>
+
+                  <button class="tool-btn" id="unitConvertBtn">Convert</button>
+                  <div id="unitResult" class="tool-result">Result: —</div>
+                </div>
+              </div>
+
+              <!-- ✅ Graph -->
+              <div class="tool-card robust-section" id="graphSection">
+                <h3>Graph</h3>
+
+                <div class="tool-grid">
+                  <input id="graphInput" type="text" value="sin(x)" />
+                  <div class="graph-range">
+                    <input id="xmin" type="number" value="-10">
+                    <input id="xmax" type="number" value="10">
+                    <input id="xstep" type="number" value="0.1">
+                  </div>
+     <div class="graph-actions">
+  <button class="tool-btn" id="plotBtn">Plot</button>
+  <button class="tool-btn" id="resetViewBtn" type="button">Reset View</button>
+</div>
+
+<canvas id="graphCanvas" width="380" height="380"></canvas>
+<div class="rp-mini">Tip: Drag to move • Scroll to zoom</div>
+
+                </div>
+              </div>
+
+              <!-- ✅ Currency Converter -->
+              <div class="tool-card robust-section" id="currencySection">
+                <h3>Currency Converter</h3>
+<div class="rp-mini">
+    <!-- ✅ Live Currency Controls -->
+<div class="currency-ui">
+  <button class="tool-btn" id="refreshRatesBtn" type="button">Refresh Rates</button>
+  <div class="rp-mini">Last Updated: <b id="lastUpdatedText">—</b></div>
+</div>
+
+  <b>Live Rates:</b> <span id="rateStatus">Offline</span>
+</div>
+
+                <div class="tool-grid">
+                  <input id="curAmount" type="number" value="1" />
+                  <select id="curFrom">
+                    <option value="INR">INR</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    <option value="JPY">JPY</option>
+                  </select>
+                  <select id="curTo">
+                    <option value="USD">USD</option>
+                    <option value="INR">INR</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    <option value="JPY">JPY</option>
+                  </select>
+
+                  <button class="tool-btn" id="curConvertBtn">Convert</button>
+                  <div id="curResult" class="tool-result">Result: —</div>
+                </div>
+              </div>
+<!-- ✅ PROGRAMMER MODE -->
+<div class="tool-card robust-section" id="programmerSection">
+  <h3>Programmer Mode</h3>
+
+  <div class="tool-grid">
+    <div class="rp-mini"><b>Input:</b> uses current expression value</div>
+
+    <div class="prog-grid">
+      <div class="prog-box"><span>DEC</span><div id="decOut">—</div></div>
+      <div class="prog-box"><span>BIN</span><div id="binOut">—</div></div>
+      <div class="prog-box"><span>OCT</span><div id="octOut">—</div></div>
+      <div class="prog-box"><span>HEX</span><div id="hexOut">—</div></div>
+    </div>
+
+    <div class="prog-actions">
+      <button class="btn soft" data-value="&">AND</button>
+      <button class="btn soft" data-value="|">OR</button>
+      <button class="btn soft" data-value="^">XOR</button>
+      <button class="btn soft" data-value="~">NOT</button>
+      <button class="btn soft" data-value="<<">SHL</button>
+      <button class="btn soft" data-value=">>">SHR</button>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ MATRIX MODE -->
+<div class="tool-card robust-section" id="matrixSection">
+  <h3>Matrix Mode (2×2)</h3>
+
+  <div class="tool-grid">
+    <div class="rp-mini">Enter values and calculate determinant/inverse</div>
+
+    <div class="matrix-grid">
+      <input id="m11" type="number" value="1">
+      <input id="m12" type="number" value="2">
+      <input id="m21" type="number" value="3">
+      <input id="m22" type="number" value="4">
+    </div>
+<h3 style="margin-top:12px;">Matrix (3×3)</h3>
+
+<div class="matrix-grid-3">
+  <input id="a11" type="number" value="1">
+  <input id="a12" type="number" value="2">
+  <input id="a13" type="number" value="3">
+
+  <input id="a21" type="number" value="0">
+  <input id="a22" type="number" value="1">
+  <input id="a23" type="number" value="4">
+
+  <input id="a31" type="number" value="5">
+  <input id="a32" type="number" value="6">
+  <input id="a33" type="number" value="0">
+</div>
+
+<button class="tool-btn" id="det3Btn" type="button">Determinant 3×3</button>
+
+    <div class="graph-actions">
+      <button class="tool-btn" id="detBtn" type="button">Determinant</button>
+      <button class="tool-btn" id="invBtn" type="button">Inverse</button>
+    </div>
+
+    <div id="matrixResult" class="tool-result">Result: —</div>
+  </div>
+</div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-modern-click-box-check-1120.mp3"></audio>
+  <script src="calculator.js"></script>
+</body>
+</html>
