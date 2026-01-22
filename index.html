@@ -16,7 +16,7 @@
 <body>
   <div class="app">
 
-    <!-- Header -->
+    
     <header class="header">
       <div class="brand">
         <h1>Quantum Calc</h1>
@@ -31,13 +31,13 @@
       </div>
     </header>
 
-    <!-- Mode Switch -->
+    
     <section class="modebar">
       <button class="mode-btn active" id="simpleModeBtn">Simple</button>
       <button class="mode-btn" id="robustModeBtn">Robust Mode</button>
     </section>
 
-    <!-- Robust Categories -->
+    
     <section class="categories hidden" id="robustCategories">
 
       <button class="cat-btn active" data-section="scientificSection">Scientific</button>
@@ -60,10 +60,10 @@
 
     </section>
 
-    <!-- Main Layout -->
+    
     <main class="layout">
 
-      <!-- History -->
+      
       <aside class="history">
         <div class="history-head">
           <h3>History</h3>
@@ -75,10 +75,10 @@
         <ul id="historyList"></ul>
       </aside>
 
-      <!-- Calculator Panel -->
+      
       <section class="panel">
 
-        <!-- Display -->
+        
         <div class="display">
           <div class="display-top">
             <span>
@@ -100,7 +100,7 @@
             <button id="clearEntryBtn" class="small-btn">CE</button>
           </div>
         </div>
-        <!-- ✅ Result Panel (Premium) -->
+        
 <div class="result-panel" id="resultPanel">
   <div class="rp-head">
     <b>Result Panel</b>
@@ -109,7 +109,7 @@
   <div id="livePreview" class="rp-preview">Preview: —</div>
   <div id="smartError" class="rp-error"></div>
 </div>
-<!-- ✅ Calculation Steps Panel -->
+
 <div class="steps-panel" id="stepsPanel">
   <div class="rp-head">
     <b>Calculation Steps</b>
@@ -119,7 +119,7 @@
 </div>
 
 
-<!-- ✅ Expression Memory Panel -->
+
 <div class="exp-memory" id="expMemory">
   <div class="rp-head">
     <b>Expression Memory</b>
@@ -129,10 +129,10 @@
 </div>
 
 
-        <!-- ✅ MAIN KEYPAD LAYOUT -->
+        
         <div class="keypad-layout">
 
-          <!-- LEFT: always number keypad -->
+          
           <div class="main-keypad">
             <div class="btn-grid active" id="simpleSection">
 
@@ -173,7 +173,7 @@
           <div class="robust-panel hidden" id="robustArea">
             <div class="robust-box">
 
-<!-- ✅ EQUATION SOLVER -->
+
 <div class="tool-card robust-section" id="solverSection">
   <h3>Equation Solver</h3>
 
@@ -190,7 +190,7 @@
 </div>
 
 
-                <!-- ✅ COMPLEX NUMBERS MODE -->
+                
 <div class="tool-card robust-section" id="complexSection">
   <h3>Complex Mode</h3>
 
@@ -229,7 +229,7 @@
   <button class="rtab" data-rtab="rtMore">More</button>
 </div>
 
-              <!-- scientific -->
+              
               <div class="btn-grid robust-section active" id="scientificSection">
                 <button class="btn soft" id="shiftBtn" type="button">SHIFT</button>
 <button class="btn soft" id="storeExpBtn" type="button">STORE</button>
@@ -372,7 +372,7 @@
               <div class="tool-card robust-section" id="currencySection">
                 <h3>Currency Converter</h3>
 <div class="rp-mini">
-    <!-- ✅ Live Currency Controls -->
+
 <div class="currency-ui">
   <button class="tool-btn" id="refreshRatesBtn" type="button">Refresh Rates</button>
   <div class="rp-mini">Last Updated: <b id="lastUpdatedText">—</b></div>
@@ -402,7 +402,7 @@
                   <div id="curResult" class="tool-result">Result: —</div>
                 </div>
               </div>
-<!-- ✅ PROGRAMMER MODE -->
+
 <div class="tool-card robust-section" id="programmerSection">
   <h3>Programmer Mode</h3>
 
@@ -427,7 +427,7 @@
   </div>
 </div>
 
-<!-- ✅ MATRIX MODE -->
+
 <div class="tool-card robust-section" id="matrixSection">
   <h3>Matrix Mode (2×2)</h3>
 
@@ -479,7 +479,7 @@
 <script src="calculator.js"></script>
 
 <script>
-  // ✅ Show splash only once per session
+  
   if (!sessionStorage.getItem("qcSplashShown")) {
     sessionStorage.setItem("qcSplashShown", "yes");
     window.location.href = "splash.html";

@@ -16,7 +16,6 @@ const clearEntryBtn = document.getElementById("clearEntryBtn");
 const memIndicator = document.getElementById("memIndicator");
 const cursorEl = document.getElementById("cursor");
 
-// mode buttons
 const simpleModeBtn = document.getElementById("simpleModeBtn");
 const robustModeBtn = document.getElementById("robustModeBtn");
 const robustCategories = document.getElementById("robustCategories");
@@ -36,13 +35,13 @@ let cursorPos = 0;
 
 const LS_KEY = "quantum_calc_professional_suite";
 
-/* ---------------- THEME ---------------- */
+
 function applyTheme(isDark){
   document.body.classList.toggle("dark", isDark);
   themeBtn.innerText = isDark ? "☀️" : "🌙";
 }
 
-/* ---------------- LocalStorage ---------------- */
+
 function loadState() {
   const saved = localStorage.getItem(LS_KEY);
   if (!saved) return;
@@ -82,7 +81,7 @@ function saveState() {
   }));
 }
 
-/* ---------------- Display ---------------- */
+
 function updateDisplay() {
   if (currentValue === "") {
     currentText.innerText = "0";
@@ -99,7 +98,7 @@ function updateDisplay() {
   saveState();
 }
 
-/* ---------------- Sound ---------------- */
+
 function playSound() {
   if (!soundOn) return;
   clickSound.currentTime = 0;
@@ -118,7 +117,7 @@ themeBtn.addEventListener("click", () => {
   saveState();
 });
 
-/* ---------------- Helpers ---------------- */
+
 function clearAll() {
   currentValue = "";
   previousValue = "";
@@ -148,7 +147,7 @@ function toggleSign() {
   updateDisplay();
 }
 
-/* ---------------- Math functions ---------------- */
+
 function factorial(n) {
   if (n < 0 || !Number.isInteger(n)) return NaN;
   let res = 1;
@@ -189,7 +188,7 @@ function applyFactorialOperators(exp) {
   return exp.replace(/(\d+|\([^()]*\))!/g, "factorial($1)");
 }
 
-/* ---------------- Angle Mode ---------------- */
+
 function updateAngleUI(){
   angleModeText.innerText = angleMode;
 }
@@ -204,7 +203,7 @@ if(angleBtn){
   });
 }
 
-/* ---------------- History ---------------- */
+
 function updateHistoryUI() {
   historyList.innerHTML = "";
   history.forEach(item => {
@@ -229,12 +228,12 @@ clearHistoryBtn.addEventListener("click", () => {
   saveState();
 });
 
-/* ---------------- Memory ---------------- */
+
 function updateMemIndicator() {
   memIndicator.innerText = memory !== 0 ? "ON" : "OFF";
 }
 
-/* ---------------- Append ---------------- */
+
 function appendValue(value) {
   playSound();
 
@@ -264,7 +263,7 @@ function appendValue(value) {
   insertAtCursor(value);
 }
 
-/* ---------------- Calculate ---------------- */
+
 function calculate() {
   if (currentValue.trim() === "") return;
 
@@ -304,7 +303,7 @@ function calculate() {
   }
 }
 
-/* ---------------- Click listeners ---------------- */
+
 document.querySelectorAll("[data-action='clear']").forEach(b => b.addEventListener("click", clearAll));
 document.querySelectorAll("[data-action='delete']").forEach(b => b.addEventListener("click", deleteOne));
 document.querySelectorAll("[data-action='equals']").forEach(b => b.addEventListener("click", calculate));
@@ -325,7 +324,7 @@ copyBtn.addEventListener("click", async () => {
 });
 clearEntryBtn.addEventListener("click", clearEntry);
 
-/* ---------------- Keyboard ---------------- */
+
 window.addEventListener("keydown", (e) => {
   const key = e.key;
   const active = document.activeElement;
@@ -342,7 +341,6 @@ window.addEventListener("keydown", (e) => {
   if (key === "Escape") clearAll();
 });
 
-/* ---------------- SIMPLE vs ROBUST ---------------- */
 function setMode(mode){
   if(mode === "simple"){
     simpleModeBtn.classList.add("active");
@@ -359,7 +357,7 @@ function setMode(mode){
 simpleModeBtn.addEventListener("click", () => setMode("simple"));
 robustModeBtn.addEventListener("click", () => setMode("robust"));
 
-/* ---------------- Category switching ---------------- */
+
 catBtns.forEach(btn=>{
   btn.addEventListener("click", ()=>{
     catBtns.forEach(b=>b.classList.remove("active"));
@@ -370,7 +368,7 @@ catBtns.forEach(btn=>{
   });
 });
 
-/* ---------------- UNIT CONVERTER ---------------- */
+
 const unitType = document.getElementById("unitType");
 const unitValue = document.getElementById("unitValue");
 const unitFrom = document.getElementById("unitFrom");
@@ -384,7 +382,7 @@ const unitOptions = {
   temp: ["c","f","k"]
   
 };
-/* ✅ Ensure advanced unit types exist */
+
 unitOptions.speed = ["kmh","ms","mph"];
 unitOptions.area = ["m2","km2","acre","hectare"];
 unitOptions.volume = ["l","ml","m3"];
@@ -458,7 +456,7 @@ unitConvertBtn.addEventListener("click", ()=>{
   unitResult.innerText = `Result: ${out}`;
 });
 
-/* ---------------- GRAPH MODE ---------------- */
+
 const graphInput = document.getElementById("graphInput");
 const plotBtn = document.getElementById("plotBtn");
 const xminEl = document.getElementById("xmin");
@@ -525,14 +523,14 @@ function plotGraph(){
 
 plotBtn.addEventListener("click", plotGraph);
 
-/* ---------------- Currency Converter (offline rates) ---------------- */
+
 const curAmount = document.getElementById("curAmount");
 const curFrom = document.getElementById("curFrom");
 const curTo = document.getElementById("curTo");
 const curConvertBtn = document.getElementById("curConvertBtn");
 const curResult = document.getElementById("curResult");
 
-/* ✅ Offline sample exchange rates (base USD) */
+
 const ratesUSD = {
   USD: 1,
   INR: 83,
@@ -552,25 +550,13 @@ curConvertBtn.addEventListener("click", ()=>{
   curResult.innerText = `Result: ${out.toFixed(2)} ${to}`;
 });
 
-/* ---------------- INIT ---------------- */
+
 loadState();
 updateMemIndicator();
 updateAngleUI();
 updateDisplay();
 setMode("simple");
-/* ==========================================================
-   ✅ PRO UPGRADES ADD-ON PACK
-   1) SHIFT scientific button
-   2) Graph zoom + drag
-   3) Live currency API
-   4) Smart error handling + live preview
-   5) Animations
-   6) Responsive behavior (no layout change)
-   7) Expression memory
-   8) Result panel
-========================================================== */
 
-/* ---------------- 8) RESULT PANEL + LIVE PREVIEW ---------------- */
 const resultPanel = document.getElementById("resultPanel");
 const livePreviewEl = document.getElementById("livePreview");
 const evalStatus = document.getElementById("evalStatus");
@@ -598,15 +584,15 @@ function safePreviewEval(){
   try{
     evalStatus.innerText = "Checking…";
 
-    // basic validation
+    
     const open = (currentValue.match(/\(/g)||[]).length;
     const close = (currentValue.match(/\)/g)||[]).length;
     if(open !== close) throw new Error("Bracket mismatch: check ( )");
 
-    // prevent double operators like ++ or ***
+   
     if(/[+\-*/]{3,}/.test(currentValue)) throw new Error("Too many operators together");
 
-    // preview result
+    
     let exp = currentValue.replaceAll("×","*").replaceAll("÷","/").replaceAll("−","-");
     exp = applyFactorialOperators(exp);
 
@@ -639,14 +625,14 @@ function safePreviewEval(){
   }
 }
 
-/* run preview after every updateDisplay */
+
 const _oldUpdateDisplay = updateDisplay;
 updateDisplay = function(){
   _oldUpdateDisplay();
   safePreviewEval();
 };
 
-/* ---------------- 7) EXPRESSION MEMORY ---------------- */
+
 const storeExpBtn = document.getElementById("storeExpBtn");
 const expMemoryList = document.getElementById("expMemoryList");
 const clearExpMemBtn = document.getElementById("clearExpMemBtn");
@@ -723,7 +709,7 @@ if(clearExpMemBtn){
 
 renderExpMemory();
 
-/* ---------------- 1) SHIFT Scientific Button ---------------- */
+
 const shiftBtn = document.getElementById("shiftBtn");
 let shiftOn = false;
 
@@ -736,7 +722,7 @@ if(shiftBtn){
   });
 }
 
-/* SHIFT mapping: keep your original buttons, only smarter action */
+
 const shiftMap = {
   "sin(": "asin(",
   "cos(": "acos(",
@@ -750,9 +736,9 @@ const _oldAppendValue = appendValue;
 appendValue = function(value){
   if(shiftOn && shiftMap[value]){
     const mapped = shiftMap[value];
-    // if mapped is a button-value token, send it back
+    
     _oldAppendValue(mapped);
-    // auto turn off SHIFT after one use (real calculator style)
+    
     shiftOn = false;
     if(shiftBtn){
       shiftBtn.innerText = "SHIFT";
@@ -763,7 +749,7 @@ appendValue = function(value){
   _oldAppendValue(value);
 };
 
-/* ---------------- 2) GRAPH Zoom + Drag ---------------- */
+
 let view = { scale: 1, offsetX: 0, offsetY: 0 };
 let dragging = false;
 let lastMouse = { x: 0, y: 0 };
@@ -771,7 +757,7 @@ let lastMouse = { x: 0, y: 0 };
 const resetViewBtn = document.getElementById("resetViewBtn");
 
 function plotGraphWithView(){
-  // same plotting but apply view transform
+  
   const xmin = parseFloat(xminEl.value);
   const xmax = parseFloat(xmaxEl.value);
   const step = Math.max(0.01, parseFloat(xstepEl.value));
@@ -779,7 +765,7 @@ function plotGraphWithView(){
   ctx.setTransform(1,0,0,1,0,0);
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  // grid base
+  
   ctx.globalAlpha = 0.25;
   for(let i=0;i<=10;i++){
     ctx.beginPath(); ctx.moveTo((canvas.width/10)*i,0); ctx.lineTo((canvas.width/10)*i,canvas.height); ctx.stroke();
@@ -787,7 +773,7 @@ function plotGraphWithView(){
   }
   ctx.globalAlpha = 1;
 
-  // view transform (zoom+pan)
+  
   ctx.translate(view.offsetX, view.offsetY);
   ctx.scale(view.scale, view.scale);
 
@@ -831,7 +817,7 @@ if(resetViewBtn){
   });
 }
 
-// zoom with wheel
+
 canvas.addEventListener("wheel", (e)=>{
   e.preventDefault();
   const delta = e.deltaY < 0 ? 1.1 : 0.9;
@@ -839,7 +825,7 @@ canvas.addEventListener("wheel", (e)=>{
   plotGraphWithView();
 }, { passive:false });
 
-// drag
+
 canvas.addEventListener("mousedown", (e)=>{
   dragging = true;
   lastMouse = { x: e.clientX, y: e.clientY };
@@ -856,15 +842,15 @@ window.addEventListener("mousemove", (e)=>{
   plotGraphWithView();
 });
 
-/* auto plot with view */
+
 setTimeout(()=>plotGraphWithView(), 250);
 
-/* ---------------- 3) LIVE Currency API ---------------- */
+
 const rateStatus = document.getElementById("rateStatus");
 const LIVE_RATE_KEY = "quantum_calc_live_rates";
 let liveRates = null;
 
-/* ✅ free endpoint (no key) */
+
 async function fetchLiveRates(){
   try{
     rateStatus.innerText = "Loading...";
@@ -895,10 +881,10 @@ async function fetchLiveRates(){
 }
 
 fetchLiveRates();
-// refresh rates every 1 hour
+
 setInterval(fetchLiveRates, 60*60*1000);
 
-/* override currency conversion to use liveRates */
+
 const _oldCurHandler = curConvertBtn.onclick;
 
 curConvertBtn.addEventListener("click", ()=>{
@@ -908,7 +894,7 @@ curConvertBtn.addEventListener("click", ()=>{
 
   const r = liveRates || ratesUSD;
 
-  // base USD calculation
+  
   if(!r[from] || !r[to]){
     curResult.innerText = "Result: Rate unavailable";
     return;
@@ -919,7 +905,7 @@ curConvertBtn.addEventListener("click", ()=>{
   curResult.innerText = `Result: ${out.toFixed(2)} ${to}`;
 });
 
-/* ---------------- 4) Smart Error Handling upgrades ---------------- */
+
 const _oldCalculate = calculate;
 calculate = function(){
   try{
@@ -930,7 +916,7 @@ calculate = function(){
   }
 };
 
-/* ---------------- 5) Smooth animations on section change ---------------- */
+
 function animatePulse(el){
   if(!el) return;
   el.style.transform = "scale(0.995)";
@@ -944,9 +930,7 @@ catBtns.forEach(btn=>{
 });
 simpleModeBtn.addEventListener("click", ()=>animatePulse(document.querySelector(".panel")));
 robustModeBtn.addEventListener("click", ()=>animatePulse(document.querySelector(".panel")));
-/* ==========================================================
-   ✅ ADDON 1: CALCULATION STEPS PANEL
-========================================================== */
+
 const stepsPanel = document.getElementById("stepsPanel");
 const stepsList = document.getElementById("stepsList");
 const stepsStatus = document.getElementById("stepsStatus");
@@ -969,7 +953,7 @@ function buildSteps(exp, result){
 
   stepsStatus.innerText = "Steps: Generated";
 
-  // Only basic explanation (safe)
+  
   let clean = exp
     .replaceAll("×","*")
     .replaceAll("÷","/")
@@ -977,7 +961,7 @@ function buildSteps(exp, result){
 
   addStep(`Expression: ${exp}`);
 
-  // show operator precedence hint
+  
   if(clean.includes("*") || clean.includes("/")){
     addStep("Rule: Multiplication/Division happens before Addition/Subtraction");
   }
@@ -994,7 +978,7 @@ function buildSteps(exp, result){
   addStep(`Final Answer = ${result}`);
 }
 
-// Hook into existing addToHistory call (no deletion)
+
 const _oldAddToHistory = addToHistory;
 addToHistory = function(exp, result){
   _oldAddToHistory(exp, result);
@@ -1004,9 +988,6 @@ addToHistory = function(exp, result){
 };
 
 
-/* ==========================================================
-   ✅ ADDON 2: ADVANCED UNIT CONVERTER
-========================================================== */
 unitOptions.speed = ["kmh","ms","mph"];
 unitOptions.area = ["m2","km2","acre","hectare"];
 unitOptions.volume = ["l","ml","m3"];
@@ -1027,7 +1008,7 @@ function convertAdvancedUnits(type, v, from, to){
     return out;
   }
 
-  // AREA (base m2)
+  
   if(type==="area"){
     let m2=v;
     if(from==="km2") m2=v*1e6;
@@ -1041,7 +1022,7 @@ function convertAdvancedUnits(type, v, from, to){
     return out;
   }
 
-  // VOLUME (base L)
+  
   if(type==="volume"){
     let l=v;
     if(from==="ml") l=v/1000;
@@ -1053,7 +1034,7 @@ function convertAdvancedUnits(type, v, from, to){
     return out;
   }
 
-  // TIME (base sec)
+  
   if(type==="time"){
     let sec=v;
     if(from==="min") sec=v*60;
@@ -1067,7 +1048,7 @@ function convertAdvancedUnits(type, v, from, to){
     return out;
   }
 
-  // DATA (base KB)
+
   if(type==="data"){
     let kb=v;
     if(from==="mb") kb=v*1024;
@@ -1084,13 +1065,13 @@ function convertAdvancedUnits(type, v, from, to){
   return v;
 }
 
-// Extend existing unit converter click (no deletion)
+
 const _oldUnitConvertHandler = unitConvertBtn.onclick;
 unitConvertBtn.addEventListener("click", ()=>{
   const type = unitType.value;
   if(!unitOptions[type]) return;
 
-  // advanced conversion triggers
+  
   if(["speed","area","volume","time","data"].includes(type)){
     const v = parseFloat(unitValue.value);
     const from = unitFrom.value;
@@ -1101,16 +1082,14 @@ unitConvertBtn.addEventListener("click", ()=>{
 });
 
 
-/* ==========================================================
-   ✅ ADDON 3: PROGRAMMER MODE (LIVE BASE VIEW)
-========================================================== */
+
 const decOut = document.getElementById("decOut");
 const binOut = document.getElementById("binOut");
 const octOut = document.getElementById("octOut");
 const hexOut = document.getElementById("hexOut");
 
 function getNumericValue(){
-  // Use currentValue if numeric else use lastAnswer
+  
   let x = Number(currentValue);
   if(!Number.isFinite(x)) x = Number(lastAnswer);
   return Math.trunc(x);
@@ -1126,7 +1105,7 @@ function updateProgrammerUI(){
   hexOut.innerText = n.toString(16).toUpperCase();
 }
 
-// update whenever display updates
+
 const _oldUpdateDisplay2 = updateDisplay;
 updateDisplay = function(){
   _oldUpdateDisplay2();
@@ -1136,9 +1115,7 @@ updateDisplay = function(){
 updateProgrammerUI();
 
 
-/* ==========================================================
-   ✅ ADDON 4: MATRIX MODE (2x2 determinant + inverse)
-========================================================== */
+
 const detBtn = document.getElementById("detBtn");
 const invBtn = document.getElementById("invBtn");
 const matrixResult = document.getElementById("matrixResult");
@@ -1178,14 +1155,10 @@ if(invBtn){
       `Result: [${ia.toFixed(4)}  ${ib.toFixed(4)} ; ${ic.toFixed(4)}  ${id.toFixed(4)}]`;
   });
 }
-/* ==========================================================
-   ✅ FIX: UNIT CONVERTER FULLY WORKING (ALL TYPES)
-   (length, weight, temp, speed, area, volume, time, data)
-========================================================== */
 
 function convertAllUnits(type, v, from, to){
 
-  // ---------------- LENGTH (base meter)
+  
   if(type==="length"){
     let m=v;
     if(from==="km") m=v*1000;
@@ -1199,7 +1172,7 @@ function convertAllUnits(type, v, from, to){
     return out;
   }
 
-  // ---------------- WEIGHT (base kg)
+  
   if(type==="weight"){
     let kg=v;
     if(from==="g") kg=v/1000;
@@ -1211,12 +1184,12 @@ function convertAllUnits(type, v, from, to){
     return out;
   }
 
-  // ---------------- TEMPERATURE
+  
   if(type==="temp"){
     return tempConvert(v, from, to);
   }
 
-  // ---------------- SPEED (base m/s)
+  
   if(type==="speed"){
     let ms=v;
     if(from==="kmh") ms=v/3.6;
@@ -1228,7 +1201,7 @@ function convertAllUnits(type, v, from, to){
     return out;
   }
 
-  // ---------------- AREA (base m2)
+  
   if(type==="area"){
     let m2=v;
     if(from==="km2") m2=v*1e6;
@@ -1242,7 +1215,7 @@ function convertAllUnits(type, v, from, to){
     return out;
   }
 
-  // ---------------- VOLUME (base liter)
+  
   if(type==="volume"){
     let l=v;
     if(from==="ml") l=v/1000;
@@ -1254,7 +1227,7 @@ function convertAllUnits(type, v, from, to){
     return out;
   }
 
-  // ---------------- TIME (base seconds)
+  
   if(type==="time"){
     let sec=v;
     if(from==="min") sec=v*60;
@@ -1268,7 +1241,7 @@ function convertAllUnits(type, v, from, to){
     return out;
   }
 
-  // ---------------- DATA (base KB)
+  
   if(type==="data"){
     let kb=v;
     if(from==="mb") kb=v*1024;
@@ -1285,7 +1258,7 @@ function convertAllUnits(type, v, from, to){
   return NaN;
 }
 
-/* ✅ Force converter click to always work correctly */
+
 unitConvertBtn.addEventListener("click", () => {
   try{
     const type = unitType.value;
@@ -1311,13 +1284,11 @@ unitConvertBtn.addEventListener("click", () => {
     unitResult.innerText = "Result: Error";
   }
 });
-/* ==========================================================
-   ✅ Currency Converter: Validation + Live API Refresh UI
-========================================================== */
+
 const refreshRatesBtn = document.getElementById("refreshRatesBtn");
 const lastUpdatedText = document.getElementById("lastUpdatedText");
 
-/* Upgrade status UI */
+
 function setRateStatus(text, type){
   if(!rateStatus) return;
   rateStatus.classList.remove("ok","warn","bad");
@@ -1330,7 +1301,7 @@ function formatTime(ts){
   return d.toLocaleString();
 }
 
-/* override / enhance fetchLiveRates UI (keep existing system) */
+
 async function fetchLiveRatesPro(){
   try{
     setRateStatus("Loading...", "warn");
@@ -1365,7 +1336,7 @@ async function fetchLiveRatesPro(){
   }
 }
 
-/* Run once and refresh hourly */
+
 fetchLiveRatesPro();
 setInterval(fetchLiveRatesPro, 60 * 60 * 1000);
 
@@ -1373,7 +1344,7 @@ if(refreshRatesBtn){
   refreshRatesBtn.addEventListener("click", fetchLiveRatesPro);
 }
 
-/* ✅ Validation helper */
+
 function currencyValidate(){
   const amt = parseFloat(curAmount.value);
   const from = curFrom.value;
@@ -1402,7 +1373,7 @@ function currencyValidate(){
   return { amt, from, to };
 }
 
-/* ✅ Upgrade currency convert click (keep your current converter, improve it) */
+
 curConvertBtn.addEventListener("click", ()=>{
   const ok = currencyValidate();
   if(!ok) return;
@@ -1421,32 +1392,28 @@ curConvertBtn.addEventListener("click", ()=>{
 
   curResult.innerText = `Result: ${out.toFixed(2)} ${to}`;
 });
-/* ==========================================================
-   ✅ FIX: Keyboard Focus Mode (Main Display vs Robust Box)
-   - typing in robust tools should NOT affect calculator input
-========================================================== */
 
-// Track where user wants to type
+
 let inputFocusMode = "calc"; // "calc" or "tools"
 
-// all tool inputs inside robust box
+
 const robustInputs = document.querySelectorAll(
   "#robustArea input, #robustArea select, #robustArea textarea"
 );
 
-// when user focuses any tool input, disable calc keyboard capture
+
 robustInputs.forEach(el => {
   el.addEventListener("focus", () => {
     inputFocusMode = "tools";
   });
 
   el.addEventListener("blur", () => {
-    // When user leaves tool input, keep tools unless they click display
+  
     inputFocusMode = "tools";
   });
 });
 
-// when user clicks on main display/editor, enable calc keyboard capture
+
 const displayBox = document.querySelector(".display");
 if(displayBox){
   displayBox.addEventListener("click", () => {
@@ -1454,7 +1421,7 @@ if(displayBox){
   });
 }
 
-// also if user clicks on number keypad, enable calc typing
+
 const keypadBox = document.querySelector(".main-keypad");
 if(keypadBox){
   keypadBox.addEventListener("click", () => {
@@ -1462,24 +1429,24 @@ if(keypadBox){
   });
 }
 
-// if user clicks robust area background, switch to tools mode
+
 if(robustArea){
   robustArea.addEventListener("click", (e) => {
-    // only if clicking inside robust panel
+    
     inputFocusMode = "tools";
   });
 }
 
-/* ✅ HARD BLOCK:
-   stop calculator keyboard handling when typing inside tools
-*/
+
+
+
 const _oldKeyHandler = window.onkeydown; // safe backup (not needed but ok)
 
-// Replace your keyboard handler by wrapping it safely
+
 window.addEventListener("keydown", (e) => {
   const active = document.activeElement;
 
-  // if user is typing in an input/select/textarea OR focus mode is tools
+ 
   if (
     inputFocusMode === "tools" ||
     (active && ["INPUT", "TEXTAREA", "SELECT"].includes(active.tagName))
@@ -1487,9 +1454,7 @@ window.addEventListener("keydown", (e) => {
     return; // ✅ do nothing (do not affect calculator input)
   }
 }, true);
-/* ===========================
-   ✅ STEPS PRO UPGRADE
-=========================== */
+
 function buildStepsPro(exp, result){
   clearSteps();
   if(!exp || exp.trim()==="") return;
@@ -1498,34 +1463,32 @@ function buildStepsPro(exp, result){
 
   addStep(`Expression: ${exp}`);
 
-  // show bracket info
+  
   const open = (exp.match(/\(/g)||[]).length;
   const close = (exp.match(/\)/g)||[]).length;
   if(open !== close) addStep(`⚠ Brackets mismatch: open=${open}, close=${close}`);
 
-  // trigonometry explanation
+  
   if(exp.includes("sin(")) addStep("Trig: sin(x) evaluated first");
   if(exp.includes("cos(")) addStep("Trig: cos(x) evaluated first");
   if(exp.includes("tan(")) addStep("Trig: tan(x) evaluated first");
 
-  // log explanation
+  
   if(exp.includes("log(")) addStep("Log: log10(x) evaluated before arithmetic");
   if(exp.includes("ln(")) addStep("Log: natural log ln(x) evaluated before arithmetic");
 
-  // factorial
+  
   if(exp.includes("!")) addStep("Factorial: x! evaluated first");
 
-  // operator precedence info
+  
   if(/[*/]/.test(exp)) addStep("Operator rule: × and ÷ before + and −");
 
   addStep(`Final Result = ${result}`);
 }
 
-/* Override steps builder to PRO */
+
 buildSteps = buildStepsPro;
-/* ===========================
-   ✅ EXPORT HISTORY (TXT/CSV)
-=========================== */
+
 const exportTxtBtn = document.getElementById("exportTxtBtn");
 const exportCsvBtn = document.getElementById("exportCsvBtn");
 
@@ -1556,14 +1519,7 @@ if(exportCsvBtn){
     downloadFile("quantum_calc_history.csv", csv);
   });
 }
-/* ===========================
-   ✅ CLOUD SYNC (Firebase)
-=========================== */
-/*
-1) Create Firebase project
-2) Enable Firestore
-3) Replace config below
-*/
+
 
 const FIREBASE_CONFIG = {
   apiKey: "YOUR_KEY",
@@ -1614,16 +1570,16 @@ async function cloudLoad(){
 
 initFirebase();
 cloudLoad();
-// auto sync every 30 seconds
+
 setInterval(cloudSave, 30000);
-/* ✅ Robust Box Tabs */
+
 document.querySelectorAll(".rtab").forEach(btn=>{
   btn.addEventListener("click", ()=>{
     document.querySelectorAll(".rtab").forEach(b=>b.classList.remove("active"));
     btn.classList.add("active");
   });
 });
-/* ✅ Stats Mode */
+
 const statsInput = document.getElementById("statsInput");
 const statsBtn = document.getElementById("statsBtn");
 const statsResult = document.getElementById("statsResult");
@@ -1664,15 +1620,13 @@ if(statsBtn){
       `Result: count=${arr.length}, sum=${arr.reduce((a,b)=>a+b,0)}, mean=${mean(arr).toFixed(4)}, median=${median(arr)}, mode=${mode(arr)}, std=${stddev(arr).toFixed(4)}`;
   });
 }
-/* ===========================
-   ✅ COMPLEX MODE
-=========================== */
+
 const c1 = document.getElementById("c1");
 const c2 = document.getElementById("c2");
 const complexResult = document.getElementById("complexResult");
 
 function parseComplex(str){
-  // supports: a+bi, a-bi, bi, a
+ 
   let s = str.replaceAll(" ", "").replaceAll("I","i");
   if(!s.includes("i")){
     return {re: parseFloat(s)||0, im:0};
@@ -1680,18 +1634,18 @@ function parseComplex(str){
 
   s = s.replace("i","");
 
-  // if only "3" -> 3i
+ 
   if(s === "" || s === "+") return {re:0, im:1};
   if(s === "-") return {re:0, im:-1};
 
-  // find last + or - after first char
+  
   let idx = -1;
   for(let i=1;i<s.length;i++){
     if(s[i]==="+" || s[i]==="-") idx=i;
   }
 
   if(idx === -1){
-    // pure imaginary
+    
     return {re:0, im: parseFloat(s)||0};
   }
 
@@ -1762,9 +1716,7 @@ document.getElementById("cInfoBtn")?.addEventListener("click", ()=>{
     complexResult.innerText = "Result: Invalid input";
   }
 });
-/* ===========================
-   ✅ MATRIX 3x3 determinant
-=========================== */
+
 const det3Btn = document.getElementById("det3Btn");
 
 function get3Matrix(){
@@ -1789,7 +1741,7 @@ function get3Matrix(){
 }
 
 function det3(A){
-  // rule of Sarrus
+  
   return (
     A[0][0]*A[1][1]*A[2][2] +
     A[0][1]*A[1][2]*A[2][0] +
@@ -1809,9 +1761,7 @@ det3Btn?.addEventListener("click", ()=>{
     matrixResult.innerText = "Result: Invalid matrix values";
   }
 });
-/* ===========================
-   ✅ FORMAT MODE (NORMAL/SCI/ENG)
-=========================== */
+
 const formatBtn = document.getElementById("formatBtn");
 let formatMode = "NORMAL";
 
@@ -1847,11 +1797,11 @@ function cycleFormat(){
 
 formatBtn?.addEventListener("click", cycleFormat);
 
-// override calculate display formatting only
+
 const _oldCalculate3 = calculate;
 calculate = function(){
   _oldCalculate3();
-  // after your calculate updates currentValue, apply formatting
+
   const num = Number(currentValue);
   if(Number.isFinite(num)){
     currentValue = formatNumber(num);
@@ -1859,31 +1809,29 @@ calculate = function(){
     updateDisplay();
   }
 };
-/* ===========================
-   ✅ EQUATION SOLVER
-=========================== */
+
 const eqInput = document.getElementById("eqInput");
 const eqResult = document.getElementById("eqResult");
 
 function solveLinear(eq){
-  // supports form: ax+b=c
+  
   const clean = eq.replaceAll(" ", "").replaceAll("^","**");
 
-  // Convert to expression: left-right = 0
+  
   const parts = clean.split("=");
   if(parts.length !== 2) throw new Error("Equation must contain =");
 
   const left = parts[0];
   const right = parts[1];
 
-  // brute solve for x using substitution
+  
   function f(x){
     const exp = `(${left})-(${right})`;
     const fn = Function("x", `"use strict"; return (${exp});`);
     return fn(x);
   }
 
-  // Use numeric method (simple)
+  
   let x = 0;
   for(let i=0;i<60;i++){
     const y = f(x);
@@ -1895,7 +1843,7 @@ function solveLinear(eq){
 }
 
 function solveQuadratic(eq){
-  // expects: ax^2+bx+c=0
+  
   const clean = eq.replaceAll(" ", "").replaceAll("^2","**2");
 
   const parts = clean.split("=");
@@ -1905,7 +1853,7 @@ function solveQuadratic(eq){
   const right = parts[1];
   const expr = `(${left})-(${right})`;
 
-  // extract coefficients by sampling
+  
   const f = x => Function("x", `"use strict"; return (${expr});`)(x);
 
   const c = f(0);
@@ -1941,15 +1889,9 @@ document.getElementById("solveQuadBtn")?.addEventListener("click", ()=>{
     eqResult.innerText = `Result: ${err.message}`;
   }
 });
-/* ==========================================================
-   ✅ FINAL FIX PACK (NO FEATURE REMOVED)
-   Fixes:
-   1) updateDisplay overwritten multiple times
-   2) calculate overwritten multiple times
-   3) currency click duplicate handlers
-========================================================== */
 
-/* ✅ 1) SAFE: Merge updateDisplay hooks */
+
+
 const __updateDisplayOriginal = updateDisplay;
 updateDisplay = function(){
   __updateDisplayOriginal();
@@ -1961,7 +1903,7 @@ updateDisplay = function(){
   try{ updateProgrammerUI(); }catch{}
 };
 
-/* ✅ 2) SAFE: Merge calculate hooks */
+
 const __calculateOriginal = calculate;
 calculate = function(){
   try{
@@ -1972,7 +1914,7 @@ calculate = function(){
     return;
   }
 
-  // apply format mode after calculate
+  
   try{
     const num = Number(currentValue);
     if(Number.isFinite(num)){
@@ -1983,7 +1925,7 @@ calculate = function(){
   }catch{}
 };
 
-/* ✅ 3) Fix Currency duplicate event calls */
+
 let __currencyHandlerAttached = false;
 function attachCurrencyHandlerOnce(){
   if(__currencyHandlerAttached) return;
